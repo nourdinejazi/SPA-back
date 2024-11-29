@@ -1,11 +1,14 @@
 package com.nourdine.vetements.entities;
 
 import java.util.Date;
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 
 @Entity
@@ -17,6 +20,17 @@ public class Vetement {
 	private String marqueVet;
 	private Double prixVet;
 	private Date DateAchat;
+	private String imagePath;
+
+	public String getImagePath() {
+		return imagePath;
+	}
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
+	@OneToMany (mappedBy = "vetement")
+	 private List<Image> images;
+
 	
 	@ManyToOne
 	private Boutique boutique;
@@ -67,7 +81,13 @@ public class Vetement {
 	public void setBoutique(Boutique boutique) {
 		this.boutique = boutique;
 	}
-	
+	public List<Image> getImages() {
+		return images;
+	}
+	public void setImages(List<Image> images) {
+		this.images = images;
+	}
+ 
 	
 	
 	

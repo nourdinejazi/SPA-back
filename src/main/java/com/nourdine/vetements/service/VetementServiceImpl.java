@@ -1,5 +1,8 @@
 package com.nourdine.vetements.service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,23 +12,33 @@ import org.springframework.stereotype.Service;
 
 import com.nourdine.vetements.entities.Boutique;
 import com.nourdine.vetements.entities.Vetement;
+import com.nourdine.vetements.repos.ImageRepository;
 import com.nourdine.vetements.repos.VetementRepository;
 
 @Service
 public class VetementServiceImpl implements VetementService {
 	@Autowired
 	VetementRepository vetementRepository;
-	
+
+	@Autowired
+	ImageRepository imageRepository;
+
 	@Override
 	public Vetement saveVetement(Vetement v) {
-		
+
 		return vetementRepository.save(v);
 	}
 
 	@Override
 	public Vetement updateVetement(Vetement v) {
-		return vetementRepository.save(v);
+		// Long oldProdImageId =
+		// this.getProduit(p.getIdProduit()).getImage().getIdImage();
+		// Long newProdImageId = p.getImage().getIdImage();
+		Vetement vetUpdated = vetementRepository.save(v);
 
+		// if (oldProdImageId != newProdImageId) // si l'image a été modifiée
+		// imageRepository.deleteById(oldProdImageId);
+		return vetUpdated;
 	}
 
 	@Override
@@ -35,8 +48,14 @@ public class VetementServiceImpl implements VetementService {
 
 	@Override
 	public void deleteVetementById(Long id) {
+		 Vetement v = getVetement(id);
+ 		try {
+		Files.delete(Paths.get(System.getProperty("user.home")+"/images/"+v.getImagePath()));
+		} catch (IOException e) {
+		e.printStackTrace();
+		} 
 		vetementRepository.deleteById(id);
-		
+
 	}
 
 	@Override
@@ -46,7 +65,7 @@ public class VetementServiceImpl implements VetementService {
 
 	@Override
 	public List<Vetement> getAllVetements() {
-		
+
 		return vetementRepository.findAll();
 	}
 
